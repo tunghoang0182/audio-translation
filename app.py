@@ -3,6 +3,7 @@ import json
 import streamlit as st
 from openai import OpenAI
 
+api_key = os.getenv('OPENAI_API_KEY')
 if not api_key:
     st.error("OpenAI API key not found. Please set the OPENAI_API_KEY environment variable.")
     st.stop()  # Stop execution if API key is not found
