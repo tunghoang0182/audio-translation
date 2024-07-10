@@ -4,7 +4,7 @@ import streamlit as st
 from openai import OpenAI
 
 # Fetch the API key from environment variables
-api_key = os.getenv('OPENAI_API_KEY')
+api_key = st.secrets["API_KEY"]
 
 # Add a debug statement to check if the API key is being retrieved
 st.write(f"API Key: {api_key}")
