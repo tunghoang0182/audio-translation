@@ -7,7 +7,7 @@ from openai import OpenAI
 api_key = os.getenv('OPENAI_API_KEY')
 
 # Add a debug statement to check if the API key is being retrieved
-st.write(f"API Key: {'Found' if api_key else 'Not Found'}")
+st.write(f"API Key: {api_key}")
 
 # Ensure the API key is available
 if not api_key:
@@ -52,7 +52,7 @@ def summarize_text(text):
             }
         ]
     )
-    return response.choices[0].message.content
+    return response.choices[0].message["content"]
 
 # Streamlit UI
 st.title("Audio File Transcription and Summarization")
@@ -68,51 +68,29 @@ if uploaded_file is not None:
 
     st.write(f"File uploaded successfully: {file_path}")
 
-    with st.spinner('Transcribing audio...'):
-        transcription_response = transcribe_audio(file_path)
-        transcription_text = transcription_response.text
+    # Use Streamlit session state to handle state and avoid reloading issues
+    if "transcription_text" not in st.session_state:
+        with st.spinner('Transcribing audio...'):
+            try:
+                transcription_response = transcribe_audio(file_path)
+                st.session_state.transcription_text = transcription_response['text']
+            except openai.error.AuthenticationError as e:
+                st.error(f"Authentication error: {e}")
+                st.stop()
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+                st.stop()
 
     st.subheader("Full Transcription")
-    st.write(transcription_text)
+    st.write(st.session_state.transcription_text)
 
-    with st.spinner('Summarizing transcription...'):
-        summary_text = summarize_text(transcription_text)
+    if "summary_text" not in st.session_state:
+        with st.spinner('Summarizing transcription...'):
+            try:
+                st.session_state.summary_text = summarize_text(st.session_state.transcription_text)
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+                st.stop()
 
     st.subheader("Summary")
-    st.write(summary_text)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    st.write(st.session_state.summary_text)
