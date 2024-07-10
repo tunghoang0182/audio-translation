@@ -3,14 +3,11 @@ import json
 import streamlit as st
 from openai import OpenAI
 
-# Load API key from file and set environment variable
 with open('api_key.json', 'r') as key_file:
     api_key = json.load(key_file)['key']
-os.environ["OPENAI_API_KEY"] = api_key
 
 # Initialize OpenAI client
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-
+client = OpenAI(api_key=api_key)
 # Ensure the uploads directory exists
 if not os.path.exists('uploads'):
     os.makedirs('uploads')
