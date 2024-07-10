@@ -3,14 +3,12 @@ import json
 import streamlit as st
 from openai import OpenAI
 
-with open('api_key.json', 'r') as key_file:
-    api_key = json.load(key_file)['key']
+if not api_key:
+    st.error("OpenAI API key not found. Please set the OPENAI_API_KEY environment variable.")
+    st.stop()  # Stop execution if API key is not found
 
 # Initialize OpenAI client
 client = OpenAI(api_key=api_key)
-# Ensure the uploads directory exists
-if not os.path.exists('uploads'):
-    os.makedirs('uploads')
 
 # Function to transcribe audio using OpenAI Whisper
 def transcribe_audio(file_path):
