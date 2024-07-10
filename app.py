@@ -23,10 +23,6 @@ def transcribe_audio(file_path):
 # Function to analyze the conversation and extract details
 def analyze_conversation(transcription_text):
     analysis_prompt = (
-        "You are a helpful assistant for the company ZyntriQix. Your task is to correct any spelling discrepancies in the transcribed text. "
-        "Make sure that the names of the following products are spelled correctly: ZyntriQix, Digique Plus, CynapseFive, VortiQore V8, EchoNix Array, "
-        "OrbitalLink Seven, DigiFractal Matrix, PULSE, RAPT, B.R.I.C.K., Q.U.A.R.T.Z., F.L.I.N.T. Only add necessary punctuation such as periods, "
-        "commas, and capitalization, and use only the context provided. Additionally, separate the text by speakers where possible, similar to diarization.\n\n"
         "After organizing the conversation, take note of every detail provided by the customer including their name, contact information, shipping address, and products ordered. "
         "Format this information clearly and concisely. Finally, evaluate the overall tone of the conversation and determine whether it was positive or negative.\n\n"
         "Here is the format to use:\n\n"
