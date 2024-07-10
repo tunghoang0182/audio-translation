@@ -2,20 +2,14 @@ import os
 import json
 import streamlit as st
 from openai import OpenAI
-from dotenv import load_dotenv
 
 # Load API key from file and set environment variable
-# Load environment variables from .env file
-load_dotenv()
-
-# Get API key from environment variable
-api_key = os.getenv("OPENAI_API_KEY")
+with open('api_key.json', 'r') as key_file:
+    api_key = json.load(key_file)['key']
+os.environ["OPENAI_API_KEY"] = api_key
 
 # Initialize OpenAI client
-client = OpenAI(api_key=api_key)
-
-# Initialize OpenAI client
-
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 # Ensure the uploads directory exists
 if not os.path.exists('uploads'):
@@ -80,6 +74,24 @@ if uploaded_file is not None:
 
     st.subheader("Summary")
     st.write(summary_text)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
