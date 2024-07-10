@@ -6,14 +6,6 @@ from openai import OpenAI
 # Fetch the API key from environment variables
 api_key = st.secrets["API_KEY"]
 
-# Add a debug statement to check if the API key is being retrieved
-st.write(f"API Key: {api_key}")
-
-# Ensure the API key is available
-if not api_key:
-    st.error("OpenAI API key not found. Please set the OPENAI_API_KEY environment variable.")
-    st.stop()  # Stop execution if API key is not found
-
 # Initialize OpenAI client
 client = OpenAI(api_key=api_key)
 
