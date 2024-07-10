@@ -9,9 +9,6 @@ api_key = st.secrets["API_KEY"]
 # Initialize OpenAI client
 client = OpenAI(api_key=api_key)
 
-# Ensure the uploads directory exists
-if not os.path.exists('uploads'):
-    os.makedirs('uploads')
 
 # Function to transcribe audio using OpenAI Whisper
 def transcribe_audio(file_path):
@@ -44,7 +41,7 @@ def summarize_text(text):
             }
         ]
     )
-    return response.choices[0].message["content"]
+    return response.choices[0].message.content
 
 # Streamlit UI
 st.title("Audio File Transcription and Summarization")
@@ -60,29 +57,18 @@ if uploaded_file is not None:
 
     st.write(f"File uploaded successfully: {file_path}")
 
-    # Use Streamlit session state to handle state and avoid reloading issues
-    if "transcription_text" not in st.session_state:
-        with st.spinner('Transcribing audio...'):
-            try:
-                transcription_response = transcribe_audio(file_path)
-                st.session_state.transcription_text = transcription_response['text']
-            except openai.error.AuthenticationError as e:
-                st.error(f"Authentication error: {e}")
-                st.stop()
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
-                st.stop()
+    with st.spinner('Transcribing audio...'):
+        transcription_response = transcribe_audio(file_path)
+        transcription_text = transcription_response.text
 
     st.subheader("Full Transcription")
-    st.write(st.session_state.transcription_text)
+    st.write(transcription_text)
 
-    if "summary_text" not in st.session_state:
-        with st.spinner('Summarizing transcription...'):
-            try:
-                st.session_state.summary_text = summarize_text(st.session_state.transcription_text)
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
-                st.stop()
+    with st.spinner('Summarizing transcription...'):
+        summary_text = summarize_text(transcription_text)
 
     st.subheader("Summary")
-    st.write(st.session_state.summary_text)
+    st.write(summary_text)
+
+
+
