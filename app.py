@@ -39,7 +39,7 @@ def analyze_conversation(transcription_text):
 
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        temperature=0.5,
+        temperature=0,
         messages=[
             {
                 "role": "system",
